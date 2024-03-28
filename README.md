@@ -56,7 +56,10 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `void nconiocleanup(void)`: Clean up resources used by NConio.
 - `int kbhit(void)`: Check if a key has been pressed. Returns the key code or 0.
 - `int putchr(int ch)`: Print a character to the console.
+- `void putchat(char ch, int x, int y)`: // Print character to console at
+  position x, y
 - `int getchr(void)`: Returns the character that was input.
+- `char getchat(int x, int y);`: // Get the character at position x, y
 - `void gotoxy(int x, int y)`: Set the cursor position.
 - `void clrscr(void)`: Clear the screen.
 - `void textcolor(int color)`: Set the text color.
@@ -67,8 +70,9 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `int wherey(void)`: Get current cursor Y position.
 - `int getconw(void)`: Get the console width in characters.
 - `int getconh(void)`: Get the console height in characters.
-- `int consizechanged(void)`: Check if console size has changed since the last
-  call.
+- `int consizechanged(void)`: Check if console size has changed since the last.
+- `void hidecursor(void)`: Make the cursor invisible.
+- `void showcursor(void)`: Make the cursor visible. call.
 
 ## Color Definitions
 
