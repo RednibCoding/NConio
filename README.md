@@ -56,10 +56,10 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `void nconiocleanup(void)`: Clean up resources used by NConio.
 - `int kbhit(void)`: Check if a key has been pressed. Returns the key code or 0.
 - `int putchr(int ch)`: Print a character to the console.
-- `void putchat(char ch, int x, int y)`: // Print character to console at
-  position x, y
+- `void putchat(char ch, int x, int y)`: Print character to console at position
+  x, y
 - `int getchr(void)`: Returns the character that was input.
-- `char getchat(int x, int y);`: // Get the character at position x, y
+- `char getchat(int x, int y);`:Get the character at position x, y
 - `void gotoxy(int x, int y)`: Set the cursor position.
 - `void clrscr(void)`: Clear the screen.
 - `void textcolor(int color)`: Set the text color.
