@@ -140,18 +140,25 @@ extern "C"
     // Custom implementation of getch for Windows
     int getch(void)
     {
-        DWORD mode, cc;
-        HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-        if (h == NULL)
+        DWORD read;
+        INPUT_RECORD inputRecord;
+        HANDLE hInput = GetStdHandle(STD_INPUT_HANDLE);
+        DWORD prev_mode;
+
+        GetConsoleMode(hInput, &prev_mode);             // Save the current console mode
+        SetConsoleMode(hInput, ENABLE_PROCESSED_INPUT); // Set mode to allow reading input records
+
+        while (1)
         {
-            return 0; // console not found
+            // Read the next input event
+            ReadConsoleInput(hInput, &inputRecord, 1, &read);
+            if (inputRecord.EventType == KEY_EVENT && inputRecord.Event.KeyEvent.bKeyDown)
+            {
+                // If it's a keydown event, return the virtual key code
+                SetConsoleMode(hInput, prev_mode); // Restore the original console mode
+                return inputRecord.Event.KeyEvent.wVirtualKeyCode;
+            }
         }
-        GetConsoleMode(h, &mode);
-        SetConsoleMode(h, mode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT));
-        TCHAR c = 0;
-        ReadConsole(h, &c, 1, &cc, NULL);
-        SetConsoleMode(h, mode);
-        return c;
     }
 
     // Custom implementation of clrscr for Windows
