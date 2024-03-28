@@ -59,7 +59,7 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `void putchat(char ch, int x, int y)`: Print character to console at position
   x, y
 - `int getchr(void)`: Returns the character that was input.
-- `char getchat(int x, int y);`:Get the character at position x, y
+- `char getchat(int x, int y);`: Get the character at position x, y
 - `void gotoxy(int x, int y)`: Set the cursor position.
 - `void clrscr(void)`: Clear the screen.
 - `void textcolor(int color)`: Set the text color.
