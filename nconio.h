@@ -39,10 +39,10 @@ extern "C"
 
     // Waits for a character to be input by the user
     // Returns the character that was input
-    int getch(void);
+    int getchr(void);
 
     // Print character to console
-    int putch(int ch);
+    int putchr(int ch);
 
     // Set cursor position
     void gotoxy(int x, int y);
@@ -137,8 +137,8 @@ extern "C"
         return 0;
     }
 
-    // Custom implementation of getch for Windows
-    int getch(void)
+    // Custom implementation of getchr for Windows
+    int getchr(void)
     {
         DWORD read;
         INPUT_RECORD inputRecord;
@@ -220,7 +220,7 @@ extern "C"
         SetConsoleCursorPosition(hConsole, coord);
     }
 
-    int putch(int ch)
+    int putchr(int ch)
     {
         // Get the standard output handle
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -538,7 +538,7 @@ int kbhit(void)
     }
 }
 
-int getch(void)
+int getchr(void)
 {
     struct termios oldt, newt;
     int ch;
@@ -551,7 +551,7 @@ int getch(void)
     return ch;
 }
 
-void putch(int ch)
+void putchr(int ch)
 {
     addch(ch);
     refresh(); // Refresh the screen to show the output
