@@ -78,6 +78,12 @@ extern "C"
     // the last call to consizechanged
     int consizechanged(void);
 
+    // Make the console cursor invisible
+    void hidecursor(void);
+
+    // Make the console cursor visible
+    void showcursor(void);
+
 #ifdef __cplusplus
 }
 #endif
@@ -474,6 +480,24 @@ extern "C"
         return 0; // False: Size has not changed
     }
 
+    void hidecursor()
+    {
+        HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_CURSOR_INFO info;
+        info.dwSize = 100;     // The size of the cursor, from 1 to 100. The default size is 25.
+        info.bVisible = FALSE; // Hide the cursor
+        SetConsoleCursorInfo(consoleHandle, &info);
+    }
+
+    void showcursor()
+    {
+        HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+        CONSOLE_CURSOR_INFO info;
+        info.dwSize = 100;    // The size of the cursor, from 1 to 100. The default size is 25.
+        info.bVisible = TRUE; // Hide the cursor
+        SetConsoleCursorInfo(consoleHandle, &info);
+    }
+
 #elif defined(__linux__) || (defined(__APPLE__) && defined(__MACH__))
 // ##################################################################
 //    Linux
@@ -650,6 +674,16 @@ int consizechanged(void)
 
     // No change in size
     return 0;
+}
+
+void hidecursor()
+{
+    curs_set(0); // Make the cursor invisible
+}
+
+void showcursor()
+{
+    curs_set(1); // Make the cursor invisible
 }
 
 #elif defined(__APPLE__) && defined(__MACH__)
