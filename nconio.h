@@ -41,8 +41,14 @@ extern "C"
     // Returns the character that was input
     int getchr(void);
 
+    // Get the character at position x, y
+    char getchat(int x, int y);
+
     // Print character to console
     int putchr(int ch);
+
+    // Print character to console at position x, y
+    void putchat(char ch, int x, int y);
 
     // Set cursor position
     void gotoxy(int x, int y);
@@ -239,6 +245,14 @@ extern "C"
         }
 
         return 0; // Return 0 if there was an error
+    }
+
+    void putchat(char ch, int x, int y)
+    {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        COORD pos = {(SHORT)x, (SHORT)y};
+        DWORD written;
+        WriteConsoleOutputCharacter(hConsole, &ch, 1, pos, &written);
     }
 
     int wherex(void)
@@ -457,6 +471,20 @@ extern "C"
         return height;
     }
 
+    char getchat(int x, int y)
+    {
+        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+        TCHAR ch;
+        DWORD read;
+        COORD coord = {(SHORT)x, (SHORT)y};
+
+        if (ReadConsoleOutputCharacter(hConsole, &ch, 1, coord, &read))
+        {
+            return ch;
+        }
+        return '\0';
+    }
+
     int consizechanged(void)
     {
         static int prev_height = 0, prev_width = 0; // Previous dimensions
@@ -581,6 +609,12 @@ void putchr(int ch)
     refresh(); // Refresh the screen to show the output
 }
 
+void putchat(char ch, int x, int y)
+{
+    mvaddch(y, x, ch); // Move to (y,x) and add a character
+    refresh();         // Apply changes to the actual screen
+}
+
 void gotoxy(int x, int y)
 {
     move(y, x); // Note: ncurses uses y, x instead of x, y
@@ -651,6 +685,13 @@ int getconh(void)
     int height, width;
     getmaxyx(stdscr, height, width);
     return height;
+}
+
+char getchat(int x, int y)
+{
+    // Move to position and get the character
+    chtype ch = mvinch(y, x); // Note: ncurses uses y,x instead of x,y
+    return ch & A_CHARTEXT;   // Mask out the character portion
 }
 
 // Returns whether the size of the console window has changed since
