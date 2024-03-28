@@ -70,9 +70,10 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `int wherey(void)`: Get current cursor Y position.
 - `int getconw(void)`: Get the console width in characters.
 - `int getconh(void)`: Get the console height in characters.
-- `int consizechanged(void)`: Check if console size has changed since the last.
+- `int consizechanged(void)`: Check if console size has changed since the last
+  call of consizechanged.
 - `void hidecursor(void)`: Make the cursor invisible.
-- `void showcursor(void)`: Make the cursor visible. call.
+- `void showcursor(void)`: Make the cursor visible.
 
 ## Color Definitions
 
