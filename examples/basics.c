@@ -1,7 +1,7 @@
 #define NCONIO_IMPL
-#include "nconio.h"
+#include "../nconio.h"
 
-#include "stdio.h"
+#include <stdio.h>
 
 void example_clrscr_and_textcolor()
 {

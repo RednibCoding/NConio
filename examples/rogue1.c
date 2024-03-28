@@ -1,8 +1,8 @@
 #define NCONIO_IMPL
-#include "nconio.h"
+#include "../nconio.h"
 
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Naive rogue like game example using nconio.h
@@ -59,7 +59,7 @@ int main(void)
             ty = rand() % 9 + 1;
             gold_drop = rand() % 10;
             gold_total += gold_drop;
-            sprintf(actionmsg, "You've defeated a goblin an got %d gold", gold_drop);
+            sprintf(actionmsg, "You've defeated a goblin and got %d gold", gold_drop);
         }
         else
         {
