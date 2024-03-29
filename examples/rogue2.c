@@ -7,6 +7,41 @@
 /**
  * Simple rogue like game example using nconio.h
  */
+#define map_rows 120
+#define map_cols 30
+char map[map_rows][map_cols];
+
+int map_init()
+{
+    for (int y = 0; y < map_rows; y++)
+    {
+        for (int x = 0; x < map_cols; x++)
+        {
+            map[x][y] = '#';
+        }
+    }
+
+    for (int y = 11; y < map_rows / 2; y++)
+    {
+        for (int x = 11; x < map_cols / 2; x++)
+        {
+            map[x][y] = ' ';
+        }
+    }
+}
+
+int map_print()
+{
+    int rows = min(map_rows, conw());
+    int cols = min(map_cols, conh());
+    for (int y = 0; y < map_rows; y++)
+    {
+        for (int x = 0; x < map_cols; x++)
+        {
+            putchr(map[x][y], x, y);
+        }
+    }
+}
 
 int main(void)
 {
@@ -14,41 +49,29 @@ int main(void)
     hidecursor(); // Hide the console cursor for cleaner movement
     clrscr();     // Clear the screen initially
 
-    int input = 0;                          // User input placeholder
-    int px = 11, py = 11;                   // Player initial coordinates
-    int prevx = px, prevy = py;             // Track previous coordinates
-    int rows = getconh(), cols = getconw(); // Console dimensions
-
-    for (int y = 0; y < rows; y++)
-    {
-        for (int x = 0; x < cols; x++)
-        {
-            putchat('#', x, y);
-        }
-    }
+    int input = 0;                    // User input placeholder
+    int px = 11, py = 11;             // Player initial coordinates
+    int prevx = px, prevy = py;       // Track previous coordinates
+    int rows = conh(), cols = conw(); // Console dimensions
 
     char prevch = getchat(px, py);
     char nextch = prevch;
-    putchat('@', px, py); // Place player at initial position
+
+    makeDungeon(rows, cols);
+    putchat('@', px, py);
 
     while ((input = getchr()) != 27) // ESC to exit
     {
         if (consizechanged())
         {
             clrscr();
-            rows = getconh();
-            cols = getconw();
-            for (int y = 0; y < rows; y++)
-            {
-                for (int x = 0; x < cols; x++)
-                {
-                    putchat('#', x, y);
-                }
-            }
+            rows = conh();
+            cols = conw();
 
             char prevch = getchat(px, py);
             char nextch = prevch;
-            putchat('@', px, py); // Place player at initial position
+            makeDungeon(rows, cols);
+            putchat('@', px, py);
         }
 
         prevx = px;

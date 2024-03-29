@@ -41,10 +41,10 @@ void example_wherex_wherey()
     getchr(); // Wait for keypress
 }
 
-void example_getconw_getconh()
+void example_conw_conh()
 {
     clrscr(); // Clear the screen
-    printf("Console dimensions - Width: %d, Height: %d\n", getconw(), getconh());
+    printf("Console dimensions - Width: %d, Height: %d\n", conw(), conh());
     getchr(); // Wait for keypress
 }
 
@@ -76,7 +76,7 @@ int main()
     example_gotoxy_and_putchr();
     // example_textbackground();
     // example_wherex_wherey();
-    // example_getconw_getconh();
+    // example_conw_conh();
     // example_consizechanged();
 
     nconiocleanup(); // Always clean up nconio
