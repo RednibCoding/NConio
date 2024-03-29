@@ -1,6 +1,6 @@
-# NConio: Cross-Platform Console I/O Library
+# nconio: Cross-Platform Console I/O Library
 
-NConio is a single-header, cross-platform library designed to facilitate console
+nconio is a single-header, cross-platform library designed to facilitate console
 I/O operations similar to the classic `conio.h` in DOS. It aims to provide an
 easy and intuitive API for tasks such as keyboard input handling, screen
 coloring, and cursor positioning across Windows, macOS, and Linux.
@@ -15,8 +15,8 @@ coloring, and cursor positioning across Windows, macOS, and Linux.
 
 ## Getting Started
 
-To use NConio in your project, simply include `nconio.h` in your source file. If
-you define `NCONIO_IMPL` before including `nconio.h`, the implementation will be
+To use nconio in your project, simply include `nconio.h` in your source file. If
+you define `nconio_IMPL` before including `nconio.h`, the implementation will be
 included as well.
 
 ```c
@@ -52,8 +52,8 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 
 ## API Overview
 
-- `void nconioinit(void)`: Initialize NConio (must be called first).
-- `void nconiocleanup(void)`: Clean up resources used by NConio.
+- `void nconioinit(void)`: Initialize nconio (must be called first).
+- `void nconiocleanup(void)`: Clean up resources used by nconio.
 - `int kbhit(void)`: Check if a key has been pressed. Returns the key code or 0.
 - `int putchr(int ch)`: Print a character to the console.
 - `void putchat(char ch, int x, int y)`: Print character to console at position
@@ -77,7 +77,7 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 
 ## Color Definitions
 
-NConio provides a set of predefined color constants from `NCONIO_BLACK` to
+nconio provides a set of predefined color constants from `NCONIO_BLACK` to
 `NCONIO_WHITE` to match the classic `conio.h` style.
 
 ```c
@@ -240,4 +240,4 @@ int main(void)
 
 ## License
 
-NConio is open-source software distributed under the MIT license.
+nconio is open-source software distributed under the MIT license.
