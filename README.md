@@ -16,7 +16,7 @@ coloring, and cursor positioning across Windows, macOS, and Linux.
 ## Getting Started
 
 To use nconio in your project, simply include `nconio.h` in your source file. If
-you define `nconio_IMPL` before including `nconio.h`, the implementation will be
+you define `NCONIO_IMPL` before including `nconio.h`, the implementation will be
 included as well.
 
 ```c
