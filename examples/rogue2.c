@@ -7,111 +7,182 @@
 /**
  * Simple rogue like game example using nconio.h
  */
-#define map_rows 120
-#define map_cols 30
-char map[map_rows][map_cols];
 
-int map_init()
+//
+// MAP
+//
+
+char **map_new(int numrows, int numcols)
 {
-    for (int y = 0; y < map_rows; y++)
+    char **map = malloc(numrows * sizeof(char *));
+
+    for (int i = 0; i < numrows; i++)
     {
-        for (int x = 0; x < map_cols; x++)
+        map[i] = malloc(numcols * sizeof(char));
+        if (map[i] == NULL)
         {
-            map[x][y] = '#';
+            for (int j = 0; j < i; j++)
+            {
+                free(map[j]);
+            }
+            free(map);
+            return NULL;
         }
     }
 
-    for (int y = 11; y < map_rows / 2; y++)
+    for (int y = 0; y < numrows; y++)
     {
-        for (int x = 11; x < map_cols / 2; x++)
+        for (int x = 0; x < numcols; x++)
         {
-            map[x][y] = ' ';
+            map[y][x] = '#';
+        }
+    }
+
+    for (int y = 11; y < numrows / 2; y++)
+    {
+        for (int x = 11; x < numcols / 2; x++)
+        {
+            map[y][x] = ' ';
+        }
+    }
+
+    return map;
+}
+
+void map_free(char **map, int numrows)
+{
+    for (int i = 0; i < numrows; i++)
+    {
+        free(map[i]);
+    }
+    free(map);
+}
+
+void map_print(char **map, int numrows, int numcols)
+{
+    for (int y = 0; y < numrows; y++)
+    {
+        for (int x = 0; x < numcols; x++)
+        {
+            putchat(map[y][x], x, y);
         }
     }
 }
 
-int map_print()
+//
+// Player
+//
+
+typedef struct
 {
-    int rows = min(map_rows, conw());
-    int cols = min(map_cols, conh());
-    for (int y = 0; y < map_rows; y++)
+    int x;
+    int y;
+    int prevx;
+    int prevy;
+    char ch;
+    char prevch;
+    char nextch;
+} player_t;
+
+player_t *player_new(int x, int y)
+{
+    player_t *player = malloc(sizeof(player_t));
+
+    player->x = x;
+    player->y = y;
+    player->prevx = player->x;
+    player->prevy = player->y;
+    player->ch = '@';
+
+    player->prevch = getchat(player->x, player->y);
+    player->nextch = player->prevch;
+
+    return player;
+}
+
+void player_move(player_t *player, char **map, int input, int numrows, int numcols)
+{
+    player->prevx = player->x;
+    player->prevy = player->y;
+
+    // Handle input and update player position, ensuring it stays within bounds
+    if ((input == 0x26 || input == 0x57) && player->y > 0) // arrow up || w
     {
-        for (int x = 0; x < map_cols; x++)
+        if (map[player->y - 1][player->x] == ' ')
         {
-            putchr(map[x][y], x, y);
+            player->y--;
+            player->nextch = getchat(player->x, player->y);
+        }
+    }
+    else if ((input == 0x28 || input == 0x53) && player->y < numrows - 1) // arrow down || s
+    {
+        if (map[player->y + 1][player->x] == ' ')
+        {
+            player->y++;
+            player->nextch = getchat(player->x, player->y);
+        }
+    }
+    else if ((input == 0x25 || input == 0x41) && player->x > 0) // arrow left || a
+    {
+        if (map[player->y][player->x - 1] == ' ')
+        {
+            player->x--;
+            player->nextch = getchat(player->x, player->y);
+        }
+    }
+    else if ((input == 0x27 || input == 0x44) && player->x < numcols - 1) // arrow right || d
+    {
+        if (map[player->y][player->x + 1] == ' ')
+        {
+            player->x++;
+            player->nextch = getchat(player->x, player->y);
         }
     }
 }
 
 int main(void)
 {
-    nconioinit(); // Initialize the custom console I/O library
-    hidecursor(); // Hide the console cursor for cleaner movement
-    clrscr();     // Clear the screen initially
+    nconioinit();
+    hidecursor();
+    clrscr();
 
-    int input = 0;                    // User input placeholder
-    int px = 11, py = 11;             // Player initial coordinates
-    int prevx = px, prevy = py;       // Track previous coordinates
-    int rows = conh(), cols = conw(); // Console dimensions
+    player_t *player = player_new(11, 11);
 
-    char prevch = getchat(px, py);
-    char nextch = prevch;
+    int input = 0; // User input
+    int rows = conh();
+    int cols = conw();
 
-    makeDungeon(rows, cols);
-    putchat('@', px, py);
+    char **map = map_new(rows, cols);
+
+    map_print(map, rows, cols);
+    putchat(player->ch, player->x, player->y);
 
     while ((input = getchr()) != 27) // ESC to exit
     {
         if (consizechanged())
         {
             clrscr();
-            rows = conh();
-            cols = conw();
 
-            char prevch = getchat(px, py);
-            char nextch = prevch;
-            makeDungeon(rows, cols);
-            putchat('@', px, py);
+            player->prevch = getchat(player->x, player->y);
+            player->nextch = player->prevch;
+            map_print(map, rows, cols);
+            putchat(player->ch, player->x, player->y);
         }
 
-        prevx = px;
-        prevy = py;
-
-        // Handle input and update player position, ensuring it stays within bounds
-        if ((input == 0x26 || input == 0x57) && py > 0) // arrow up || w
-        {
-            py--;
-            nextch = getchat(px, py);
-        }
-        else if ((input == 0x28 || input == 0x53) && py < rows - 1) // arrow down || s
-        {
-            py++;
-            nextch = getchat(px, py);
-        }
-        else if ((input == 0x25 || input == 0x41) && px > 0) // arrow left || a
-        {
-            px--;
-            nextch = getchat(px, py);
-        }
-        else if ((input == 0x27 || input == 0x44) && px < cols - 1) // arrow right || d
-        {
-            px++;
-            nextch = getchat(px, py);
-        }
+        player_move(player, map, input, rows, cols);
 
         // If position changed, update screen
-        if (prevx != px || prevy != py)
+        if (player->prevx != player->x || player->prevy != player->y)
         {
-            putchat(prevch, prevx, prevy);
-            prevch = nextch;
-            putchat('@', px, py);
+            putchat(player->prevch, player->prevx, player->prevy);
+            player->prevch = player->nextch;
+            putchat(player->ch, player->x, player->y);
         }
     }
 
-    clrscr();              // Clear screen on exit
-    showcursor();          // Show cursor on exit
-    textcolorreset();      // Reset the text color
-    textbackgroundreset(); // reset the background color
-    nconiocleanup();       // Cleanup resources
+    free(player);
+    map_free(map, rows);
+    clrscr();        // Clear screen on exit
+    nconiocleanup(); // Cleanup
     return 0;
 }
