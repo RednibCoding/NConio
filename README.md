@@ -58,7 +58,8 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `int putchr(int ch)`: Print a character to the console.
 - `void putchat(char ch, int x, int y)`: Print character to console at position
   x, y
-- `int getchr(void)`: Returns the input character, blocking execution until input is received.
+- `int getchr(void)`: Returns the input character, blocking execution until
+  input is received.
 - `char getchat(int x, int y);`: Get the character at position x, y
 - `void gotoxy(int x, int y)`: Set the cursor position.
 - `void clrscr(void)`: Clear the screen.
@@ -68,8 +69,8 @@ to find the ncurses library. Link against `ncurses` as you would on Linux.
 - `void textbackgroundreset()`: Reset background color to default.
 - `int wherex(void)`: Get current cursor X position.
 - `int wherey(void)`: Get current cursor Y position.
-- `int getconw(void)`: Get the console width in characters.
-- `int getconh(void)`: Get the console height in characters.
+- `int conw(void)`: Get the console width in characters.
+- `int conh(void)`: Get the console height in characters.
 - `int consizechanged(void)`: Check if console size has changed since the last
   call of consizechanged.
 - `void hidecursor(void)`: Make the cursor invisible.
