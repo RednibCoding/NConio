@@ -116,7 +116,9 @@ extern "C"
 
     void nconiocleanup(void)
     {
-        // Do nothing
+        showcursor();          // Show cursor on exit
+        textcolorreset();      // Reset the text color
+        textbackgroundreset(); // reset the background color
     }
 
     // Custom implementation of kbhit for Windows
@@ -571,7 +573,10 @@ void nconioinit()
 
 void nconiocleanup(void)
 {
-    endwin(); // Clean up ncurses environment before exiting
+    endwin();              // Clean up ncurses environment before exiting
+    showcursor();          // Show cursor on exit
+    textcolorreset();      // Reset the text color
+    textbackgroundreset(); // reset the background color
 }
 
 int kbhit(void)
