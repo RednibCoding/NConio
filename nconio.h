@@ -74,10 +74,10 @@ extern "C"
     int wherey(void);
 
     // Get the width in characters of the console
-    int getconw(void);
+    int conw(void);
 
     // Get the height in characters of the console
-    int getconh(void);
+    int conh(void);
 
     // Returns whether the size of the console window has changed since
     // the last call to consizechanged
@@ -424,7 +424,7 @@ extern "C"
         textbackground(-1);
     }
 
-    int getconw(void)
+    int conw(void)
     {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         int width;
@@ -447,7 +447,7 @@ extern "C"
         return width;
     }
 
-    int getconh(void)
+    int conh(void)
     {
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         int height;
@@ -671,7 +671,7 @@ int wherey(void)
 }
 
 // Get the width in characters of the console
-int getconw(void)
+int conw(void)
 {
     int height, width;
     getmaxyx(stdscr, height, width); // Use stdscr for the standard screen
@@ -679,7 +679,7 @@ int getconw(void)
 }
 
 // Get the height in characters of the console
-int getconh(void)
+int conh(void)
 {
     int height, width;
     getmaxyx(stdscr, height, width);
