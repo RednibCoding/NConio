@@ -37,7 +37,7 @@ extern "C"
     // Returns the virtual key code of the pressed key or 0
     int kbhit(void);
 
-    // Returns the the virtual key code of the pressed key, blocking execution until input is received.
+    // Returns the virtual key code of the pressed key, blocking execution until input is received.
     int getchr(void);
 
     // Get the character at position x, y
