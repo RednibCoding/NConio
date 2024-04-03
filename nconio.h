@@ -109,9 +109,23 @@ extern "C"
     // Global variable to hold the current text and background color attributes
     static WORD __nconio_currentAttributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
 
+    BOOL WINAPI __ctrl_handler(DWORD fdwCtrlType)
+    {
+        switch (fdwCtrlType)
+        {
+        case CTRL_C_EVENT:
+            return TRUE; // Handle the CTRL-C signal
+        default:
+            return FALSE;
+        }
+    }
+
     void nconioinit(void)
     {
         __nconio_currentAttributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE;
+
+        // Disable Ctrl-C
+        SetConsoleCtrlHandler((PHANDLER_ROUTINE)__ctrl_handler, TRUE);
     }
 
     void nconiocleanup(void)
@@ -119,6 +133,9 @@ extern "C"
         showcursor();          // Show cursor on exit
         textcolorreset();      // Reset the text color
         textbackgroundreset(); // reset the background color
+
+        // Re-enable Ctrl-C
+        SetConsoleCtrlHandler((PHANDLER_ROUTINE)__ctrl_handler, FALSE);
     }
 
     // Custom implementation of kbhit for Windows
@@ -536,6 +553,7 @@ extern "C"
 #include <termios.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <signal.h>
 
 // Global variables to store current foreground and background colors
 static int __nconio_current_fg = NCONIO_WHITE; // Default to white on black
@@ -543,11 +561,12 @@ static int __nconio_current_bg = NCONIO_BLACK;
 
 void nconioinit()
 {
-    initscr();             // Start curses mode
-    cbreak();              // Line buffering disabled
-    noecho();              // Don't echo while we do getch
-    nodelay(stdscr, TRUE); // Make getch non-blocking
-    keypad(stdscr, TRUE);  // Enable function and arrow keys
+    initscr();               // Start curses mode
+    cbreak();                // Line buffering disabled
+    noecho();                // Don't echo while we do getch
+    nodelay(stdscr, TRUE);   // Make getch non-blocking
+    keypad(stdscr, TRUE);    // Enable function and arrow keys
+    signal(SIGINT, SIG_IGN); // Ignore Ctrl-C
 
     // init colors
     if (has_colors() == FALSE)
@@ -573,10 +592,11 @@ void nconioinit()
 
 void nconiocleanup(void)
 {
-    endwin();              // Clean up ncurses environment before exiting
-    showcursor();          // Show cursor on exit
-    textcolorreset();      // Reset the text color
-    textbackgroundreset(); // reset the background color
+    endwin();                // Clean up ncurses environment before exiting
+    showcursor();            // Show cursor on exit
+    textcolorreset();        // Reset the text color
+    textbackgroundreset();   // reset the background color
+    signal(SIGINT, SIG_DFL); // Restore default Ctrl-C behavior
 }
 
 int kbhit(void)
